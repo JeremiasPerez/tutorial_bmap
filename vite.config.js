@@ -18,6 +18,7 @@ export default defineConfig({
         // ...
       ]
   })],
+  base: mode === 'production' ? '/tutorial_bmap/' : '/',
   server: {
     host: true,
     strictPort: true,
