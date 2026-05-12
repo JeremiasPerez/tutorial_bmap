@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import Mapa from "./components/Mapa";
 import Grafico from "./components/Grafico";
 import Peluquerias from "./components/Peluquerias";
-import "./app.css";
+import "./App.css";
 
 export default function App() {
   const [barriosData, setBarriosData] = useState(null);
