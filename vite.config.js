@@ -24,4 +24,4 @@ export default defineConfig(({ mode }) => ({
     strictPort: true,
     port: 5173
   }
-})
+}))
