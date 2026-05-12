@@ -1,0 +1,47 @@
+name: Desplegar en GitHub Pages
+
+on:
+  push:
+    branches: ["main"]
+ 
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Configurar GitHub pages
+        uses: actions/configure-pages@v5
+
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Instalar dependencias
+        run: npm ci
+ 
+      - name: Build
+        run: npm run build
+
+      - name: Subir artefacto a Pages
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./dist
+
+  deploy:
+    environment:
+      name: github-pages
+    needs: build
+    runs-on: ubuntu-latest
+ 
+    steps:
+      - name: Desplegar en GitHub Pages
+        uses: actions/deploy-pages@v4
