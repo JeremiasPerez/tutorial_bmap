@@ -3,8 +3,8 @@ import react from '@vitejs/plugin-react'
 import { VitePWA } from "vite-plugin-pwa";
 
 // https://vite.dev/config/
-export default defineConfig({
-  plugins: [react(), 
+export default defineConfig(({ mode }) => ({
+    plugins: [react(), 
     VitePWA({
       strategies: "injectManifest", // inyectar la lista de assets en el service worker automáticamente
       srcDir: "src", // carpeta donde está el service worker fuente
