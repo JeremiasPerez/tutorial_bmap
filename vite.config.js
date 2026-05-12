@@ -10,7 +10,7 @@ export default defineConfig(({ mode }) => ({
       srcDir: "src", // carpeta donde está el service worker fuente
       filename: "sw.js", // nombre del fichero generado con el service worker (se traduce a dist/sw.js)
       registerType: "autoUpdate", // cuando haya una nueva versión del sw, actualizarlo automáticamente
-      injectRegister: "auto", // vite decide si hace falta o no inyectar el código para registrar el service worker
+      //injectRegister: "auto", // vite decide si hace falta o no inyectar el código para registrar el service worker
       includeAssets: [ // recursos (de la carpeta public) adicionales a cachear antes siquiera de registrar el serviceworker
         "favicon.ico",
         "icons/*.png",
@@ -18,7 +18,7 @@ export default defineConfig(({ mode }) => ({
         // ...
       ]
   })],
-  base: mode === 'production' ? '/tutorial_bmap/' : '/',
+  base: mode === 'production' ? '/tutorial_bmap' : '/',
   server: {
     host: true,
     strictPort: true,
