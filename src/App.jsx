@@ -14,9 +14,9 @@ export default function App() {
   useEffect(() => {
     async function cargarDatos() {
       const [geojsonRes, indicadoresRes, comerciosRes] = await Promise.all([
-        fetch("/src/data/barrios.geojson"),
-        fetch("/src/data/indicadores.json"),
-        fetch("/src/data/comercios_clasificados.geojson")
+        fetch("/data/barrios.geojson"),
+        fetch("/data/indicadores.json"),
+        fetch("/data/comercios_clasificados.geojson")
       ]);
 
       const geojson = await geojsonRes.json();
