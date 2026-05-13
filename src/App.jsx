@@ -14,7 +14,7 @@ export default function App() {
   useEffect(() => {
     async function cargarDatos() {
       const [geojsonRes, comerciosRes] = await Promise.all([
-        fetch("(/tutorial_bmap/barrios_con_datos.geojson"),
+        fetch("/tutorial_bmap/barrios_con_datos.geojson"),
         fetch("/tutorial_bmap/comercios_clasificados.geojson")
       ]);
       const geojson = await geojsonRes.json();
