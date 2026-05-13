@@ -10,7 +10,7 @@
 
 // renta familiar media por año -> rpf_rp28 -> V
 
-// edad media por barrio -> https://public.tableau.com/app/profile/gasteizko.udala.ayuntamiento.de.vitoria/viz/Demografa_estructuraydinmica_16539919851600/AurkezpenaPresentacin
+// edad media por barrio -> https://public.tableau.com/app/profile/gasteizko.udala.ayuntamiento.de.vitoria/viz/Demografa_estructuraydinmica_16539919851600/AurkezpenaPresentacin -> V
 
 // superficie -> T2.xlsx -> V
 
@@ -32,7 +32,7 @@ XLSX.set_cptable(cpexcel);
 
 
 const barrios = JSON.parse(
-  fs.readFileSync("../public/data/barrios.geojson", "utf8")
+  fs.readFileSync("./data/barrios.geojson", "utf8")
 );
 
 
@@ -51,7 +51,7 @@ const getCellValue = (sheet, col, row) => {
 
 
 const processDemographyXlsx = (barrios) => {
-    const workbook = XLSX.readFile("../public/data/De2.xlsx");
+    const workbook = XLSX.readFile("./data/De2.xlsx");
     const sheet = workbook.Sheets['Sheet 1']
     const barrioIdRegexp = /\d\d/
     
@@ -78,7 +78,7 @@ const processDemographyXlsx = (barrios) => {
 }
 
 const processHomesXlsx = (barrios) => {
-    const workbook = XLSX.readFile("../public/data/Terr2.xlsx");
+    const workbook = XLSX.readFile("./data/Terr2.xlsx");
     const sheet = workbook.Sheets['Sheet 1']
     const barrioIdRegexp = /\d\d/
     
@@ -104,7 +104,7 @@ const processHomesXlsx = (barrios) => {
 }
 
 const processVehicuosXlsx = (barrios) => {
-    const workbook = XLSX.readFile("../public/data/Movi2.xlsx");
+    const workbook = XLSX.readFile("./data/Movi2.xlsx");
     const sheet = workbook.Sheets['Sheet 1']
     const barrioIdRegexp = /\d\d/
     
@@ -127,7 +127,7 @@ const processVehicuosXlsx = (barrios) => {
 }
 
 const processRentaPersonalXlsx = (barrios) => {
-    const workbook = XLSX.readFile("../public/data/renta_personal.xlsx");
+    const workbook = XLSX.readFile("./data/renta_personal.xlsx");
     const sheet = workbook.Sheets['rpf_rp22_2p']
     const barrioIdRegexp = /\d\d/
     const cols = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
@@ -155,7 +155,7 @@ const processRentaPersonalXlsx = (barrios) => {
 }
 
 const processRentaFamiliarlXlsx = (barrios) => {
-    const workbook = XLSX.readFile("../public/data/renta_familiar.xlsx");
+    const workbook = XLSX.readFile("./data/renta_familiar.xlsx");
     const sheet = workbook.Sheets['rpf_rf28_2f']
     const barrioIdRegexp = /\d\d/
     const cols = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
@@ -184,7 +184,7 @@ const processRentaFamiliarlXlsx = (barrios) => {
 }
 
 const processSuperficieXlsx = (barrios) => {
-    const workbook = XLSX.readFile("../public/data/T2.xlsx");
+    const workbook = XLSX.readFile("./data/T2.xlsx");
     const sheet = workbook.Sheets['Sheet 1']
     const barrioIdRegexp = /\d\d/
     const cols = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
@@ -206,6 +206,31 @@ const processSuperficieXlsx = (barrios) => {
     }
 }
 
+const processEdadMediaXlsx = (barrios) => {
+    const workbook = XLSX.readFile("./data/EdadMediaVG.xlsx");
+    const sheet = workbook.Sheets['Hoja 1']
+    const cols = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+    
+    for(let i=3;i<=32;i++){
+        const barrioCell = getCellValue(sheet, 'A',i)
+        const barrioId = typeof barrioCell == 'number' ? barrioCell : parseInt(barrioCell)
+
+        const b = barrios.features.find((ba) => ba.properties.BARRIO === barrioId)
+        if (b == null){
+            console.log(barrioCell+' not found')
+            continue
+        }
+
+        if (b.properties.edad_media == null) b.properties.edad_media = {}
+
+        for(let j=3;j<=5;j++){
+            const year = getCellValue(sheet, cols.charAt(j-1),2)
+            const amountCell = getCellValue(sheet, cols.charAt(j-1), i)
+            b.properties.edad_media[year] = Number(amountCell)
+        }
+    }
+}
+
 const nuevosBarrios = {...barrios}
 processDemographyXlsx(nuevosBarrios)
 processHomesXlsx(nuevosBarrios)
@@ -213,6 +238,8 @@ processVehicuosXlsx(nuevosBarrios)
 processRentaPersonalXlsx(nuevosBarrios)
 processRentaFamiliarlXlsx(nuevosBarrios)
 processSuperficieXlsx(nuevosBarrios)
+processEdadMediaXlsx(nuevosBarrios)
+
 nuevosBarrios.features.forEach((b) => {
     delete b.properties['OBJECTID']
     delete b.properties['SHAPE__ST_AREA__']
@@ -220,14 +247,14 @@ nuevosBarrios.features.forEach((b) => {
     delete b.properties['DB2GSE.ST_Area(SHAPE)']
     delete b.properties['DB2GSE.SdeLength(SHAPE)']
 })
-console.log(nuevosBarrios.features[2].properties)
 
-/*
+console.log(nuevosBarrios.features[2])
+
+
 fs.writeFileSync(
-  "./public/data/barrios_con_datos.geojson",
+  "./data/barrios_con_datos.geojson",
   JSON.stringify(nuevosBarrios, null, 2),
   "utf8"
 );
 
 console.log("GeoJSON generado correctamente");
-*/

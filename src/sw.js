@@ -10,7 +10,7 @@ registerRoute(
     request.destination === "document" ||
     url.pathname.endsWith(".geojson") ||
     url.pathname.endsWith(".json"),
-  new StaleWhileRevalidate({
+  new CacheFirst({
     cacheName: "datos-app",
   })
 );

@@ -12,8 +12,6 @@ export default defineConfig(({ mode }) => ({
       registerType: "autoUpdate", // cuando haya una nueva versión del sw, actualizarlo automáticamente
       //injectRegister: "auto", // vite decide si hace falta o no inyectar el código para registrar el service worker
       includeAssets: [ // recursos (de la carpeta public) adicionales a cachear antes siquiera de registrar el serviceworker
-        "favicon.ico",
-        "icons/*.png",
         "manifest.json",
         // ...
       ]
