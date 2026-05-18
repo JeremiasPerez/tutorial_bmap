@@ -73,7 +73,7 @@ const processDemographyXlsx = (barrios) => {
 
         if (b.properties.poblacionPorRango == null) b.properties.poblacionPorRango = {}
         if (b.properties.poblacionPorRango[year] == null) b.properties.poblacionPorRango[year] = {}
-        b.properties.poblacionPorRango[year][rangoCell] = {total: Number(totalCell), hombres: Number(hombresCell), mujeres: Number(mujeresCell)}
+        b.properties.poblacionPorRango[year][rangoCell.replace(/~/g,'-')] = {total: Number(totalCell), hombres: Number(hombresCell), mujeres: Number(mujeresCell)}
     }
 }
 
@@ -211,7 +211,7 @@ const processEdadMediaXlsx = (barrios) => {
     const sheet = workbook.Sheets['Hoja 1']
     const cols = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
     
-    for(let i=3;i<=32;i++){
+    for(let i=3;i<=33;i++){
         const barrioCell = getCellValue(sheet, 'A',i)
         const barrioId = typeof barrioCell == 'number' ? barrioCell : parseInt(barrioCell)
 
@@ -223,7 +223,7 @@ const processEdadMediaXlsx = (barrios) => {
 
         if (b.properties.edad_media == null) b.properties.edad_media = {}
 
-        for(let j=3;j<=5;j++){
+        for(let j=3;j<=22;j++){
             const year = getCellValue(sheet, cols.charAt(j-1),2)
             const amountCell = getCellValue(sheet, cols.charAt(j-1), i)
             b.properties.edad_media[year] = Number(amountCell)
